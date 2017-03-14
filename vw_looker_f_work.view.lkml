@@ -116,6 +116,6 @@ view: vw_looker_f_work {
 
   measure: count {
     type: count
-    drill_fields: [tenant_name, client_name, primary_status_name, secondary_status_name]
+    drill_fields: [tenant_name, client_name, primary_status_name, secondary_status_name, assigned_user, work_item_title, dates.date, work_due.date]
   }
 }
