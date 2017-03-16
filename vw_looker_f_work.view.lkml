@@ -69,9 +69,17 @@ view: vw_looker_f_work {
     sql: ${TABLE}.secondary_status_name ;;
   }
 
+  dimension: combined_status_name {
+    type: string
+    label: "Status"
+    description: "A combination of Primary and Secondary Status"
+    sql: CASE WHEN ${secondary_status_name} IS NOT NULL THEN ${secondary_status_name} ELSE ${primary_status_name} END ;;
+  }
+
   dimension: source_work_item_permakey {
     type: string
     hidden: yes
+    primary_key: yes
     label: "work_item_permakey"
     sql: ${TABLE}.source_work_item_permakey ;;
   }
@@ -105,6 +113,7 @@ view: vw_looker_f_work {
   dimension: work_item_title {
     type: string
     label: "Work Title"
+    #primary_key: yes
     sql: ${TABLE}.work_item_title ;;
   }
 
@@ -124,4 +133,16 @@ view: vw_looker_f_work {
     sql: ${work_item_title} ;;
     drill_fields: [tenant_name, client_name,work_item_title]
   }
+
+  measure: avg_days_overdue {
+    label: "Average Days Overdue"
+    type: average_distinct
+    filters: {
+      field: is_overdue
+      value: "Y"
+    }
+    sql: DATEDIFF(day, ${work_due_date}, ${dates_date});;
+    #drill_fields: [id, work_title,primary_status,org_name, contact_name,start_date,due_date,completed_date]
+  }
+
 }
