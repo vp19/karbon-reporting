@@ -118,4 +118,10 @@ view: vw_looker_f_work {
     type: count
     drill_fields: [tenant_name, client_name, primary_status_name, secondary_status_name, assigned_user, work_item_title, dates.date, work_due.date]
   }
+
+  measure: distinct_work_items {
+    type: count_distinct
+    sql: ${work_item_title} ;;
+    drill_fields: [tenant_name, client_name,work_item_title]
+  }
 }
