@@ -7,7 +7,7 @@ view: work_due_and_completed {
               tenant_permakey,
               dates,
               'Completed' AS status ,
-              COUNT(*) AS number_work_items
+              COUNT(DISTINCT source_work_item_permakey) AS number_work_items
           FROM Reporting.vw_looker_F_Work
           WHERE primary_status_name ='Completed'
           GROUP BY tenant_name,
@@ -19,7 +19,7 @@ view: work_due_and_completed {
                tenant_permakey,
                work_due_date AS dates,
                'Work Due' AS STATUS,
-               COUNT(*) AS number_work_items
+               COUNT(DISTINCT source_work_item_permakey) AS number_work_items
           FROM Reporting.vw_looker_F_Work
           GROUP BY tenant_name,
                 tenant_permakey,
