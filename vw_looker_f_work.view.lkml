@@ -145,4 +145,11 @@ view: vw_looker_f_work {
     #drill_fields: [id, work_title,primary_status,org_name, contact_name,start_date,due_date,completed_date]
   }
 
+  #measure: distinct_due_dates {
+  #  label: "Number of Days Due Date Moved"
+  #  type: count_distinct
+  #  sql: ${TABLE}.work_due_date ;;
+  #  #drill_fields: [tenant_name, client_name,work_item_title]
+  #}
+
 }
