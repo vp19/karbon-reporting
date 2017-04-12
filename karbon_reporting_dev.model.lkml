@@ -24,8 +24,23 @@ explore: work_due_and_completed {
   }
 }
 
-explore: days_to_complete_work {}
+explore: days_to_complete_work {
+  access_filter: {
+    field: days_to_complete_work.tenant_permakey
+    user_attribute: tenant_permakey
+  }
+}
 
-explore:  days_spent_in_open_states {}
+explore:  days_spent_in_open_states {
+  access_filter: {
+    field: days_spent_in_open_states.tenant_permakey
+    user_attribute: tenant_permakey
+  }
+}
 
-explore:  due_dates_moved {}
+explore:  due_dates_moved {
+  access_filter: {
+    field: due_dates_moved.tenant_permakey
+    user_attribute: tenant_permakey
+  }
+}
