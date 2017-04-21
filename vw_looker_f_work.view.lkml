@@ -21,6 +21,13 @@ view: vw_looker_f_work {
     sql: ${TABLE}.client_type ;;
   }
 
+  dimension: pk {
+    hidden: yes
+    type: string
+    primary_key: yes
+    sql: concat(${dates_raw},${tenant_permakey},${source_work_item_permakey});;
+  }
+
   dimension_group: dates {
     type: time
     timeframes: [
@@ -69,6 +76,7 @@ view: vw_looker_f_work {
     sql: ${TABLE}.secondary_status_name ;;
   }
 
+
   dimension: combined_status_name {
     type: string
     label: "Status"
@@ -79,7 +87,7 @@ view: vw_looker_f_work {
   dimension: source_work_item_permakey {
     type: string
     hidden: yes
-    primary_key: yes
+    #primary_key: yes
     label: "work_item_permakey"
     sql: ${TABLE}.source_work_item_permakey ;;
   }
@@ -130,8 +138,8 @@ view: vw_looker_f_work {
 
   measure: distinct_work_items {
     type: count_distinct
-    sql: ${work_item_title} ;;
-    drill_fields: [tenant_name, client_name,work_item_title]
+    sql: ${source_work_item_permakey} ;;
+    drill_fields: [tenant_name, client_name,work_item_title, combined_status_name, source_work_item_permakey, dates.month, work_due.month]
   }
 
   measure: avg_days_overdue {
@@ -142,6 +150,7 @@ view: vw_looker_f_work {
       value: "Y"
     }
     sql: DATEDIFF(day, ${work_due_date}, ${dates_date});;
+    value_format_name: decimal_1
     #drill_fields: [id, work_title,primary_status,org_name, contact_name,start_date,due_date,completed_date]
   }
 

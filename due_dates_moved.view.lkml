@@ -6,11 +6,14 @@ view: due_dates_moved {
               source_work_item_permakey,
               count(distinct work_due_date) AS due_date_moves
           FROM Reporting.vw_looker_F_Work
+
           GROUP BY  tenant_name,
                     tenant_permakey,
                     source_work_item_permakey
        ;;
    }
+
+   #       WHERE {% condition date_filter %} table.date {% endcondition %}
 
   dimension: tenant_name {
     type: string
