@@ -1,19 +1,41 @@
 view: due_dates_moved {
    derived_table: {
      sql: SELECT
-              tenant_name,
-              tenant_permakey,
-              source_work_item_permakey,
-              count(distinct work_due_date) AS due_date_moves
-          FROM Reporting.vw_looker_F_Work
-
-          GROUP BY  tenant_name,
-                    tenant_permakey,
-                    source_work_item_permakey
+                w.tenant_name AS tenant_name,
+                w.tenant_permakey AS tenant_permakey,
+                w.source_work_item_permakey AS source_work_item_permakey,
+                COUNT(DISTINCT w.work_due_date) -1  AS due_date_moves
+          FROM Reporting.vw_looker_F_Work w
+          JOIN
+          (
+                SELECT DISTINCT  tenant_permakey, source_work_item_permakey
+                FROM Reporting.vw_looker_F_Work
+                WHERE {% condition year_filter %} Reporting.vw_looker_F_Work.year {% endcondition %}
+                AND  {% condition month_filter %} Reporting.vw_looker_F_Work.month {% endcondition %}
+          ) a
+          ON a.tenant_permakey = w.tenant_permakey
+          AND a.source_work_item_permakey = w.source_work_item_permakey
+          WHERE w.work_due_date IS NOT NULL
+          GROUP BY  w.tenant_name,
+                    w.tenant_permakey,
+                     w.source_work_item_permakey
+          HAVING count(distinct w.work_due_date) > 1
        ;;
    }
 
    #       WHERE {% condition date_filter %} table.date {% endcondition %}
+
+  filter:  year_filter {
+    label: "Year"
+    type:  number
+    default_value: "2017"
+  }
+
+  filter:  month_filter {
+    label: "Month"
+    type:  number
+    default_value: "4"
+  }
 
   dimension: tenant_name {
     type: string
