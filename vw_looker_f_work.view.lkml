@@ -89,7 +89,20 @@ view: vw_looker_f_work {
     hidden: yes
     #primary_key: yes
     label: "work_item_permakey"
+    #url: "https://stage.karbonhq.com/{{tenant_permakey}}#/work/4BSPYCtfgGJn"
     sql: ${TABLE}.source_work_item_permakey ;;
+  }
+
+  dimension: work_item_permakey {
+    type: string
+    hidden: yes
+    #primary_key: yes
+    label: "Work Item Permakey Link"
+    link: {
+          label: "Work Item"
+          url: "https://stage.karbonhq.com/{{ vw_looker_f_work.tenant_permakey.value }}#/work/{{ value }}"
+    }
+    sql: ${source_work_item_permakey} ;;
   }
 
   dimension: tenant_name {
@@ -122,6 +135,11 @@ view: vw_looker_f_work {
     type: string
     label: "Work Title"
     #primary_key: yes
+    link: {
+      label: "Work Item"
+      url: "https://stage.karbonhq.com/{{ vw_looker_f_work.tenant_permakey._value }}#/work/{{ vw_looker_f_work.source_work_item_permakey._value }}"
+      #icon_url: "http://google.com/favicon.ico"
+    }
     sql: ${TABLE}.work_item_title ;;
   }
 
@@ -139,7 +157,7 @@ view: vw_looker_f_work {
   measure: distinct_work_items {
     type: count_distinct
     sql: ${source_work_item_permakey} ;;
-    drill_fields: [tenant_name, client_name,work_item_title, combined_status_name, source_work_item_permakey, dates.month, work_due.month]
+    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month]
   }
 
   measure: avg_days_overdue {
