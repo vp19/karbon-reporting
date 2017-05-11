@@ -138,7 +138,7 @@ view: vw_looker_f_work {
     link: {
       label: "Work Item"
       url: "https://stage.karbonhq.com/{{ vw_looker_f_work.tenant_permakey._value }}#/work/{{ vw_looker_f_work.source_work_item_permakey._value }}"
-      #icon_url: "http://google.com/favicon.ico"
+      icon_url: "https://karbonhq.com/themes/karbon/img/icons/favicons/favicon-16x16.png"
     }
     sql: ${TABLE}.work_item_title ;;
   }
@@ -151,7 +151,7 @@ view: vw_looker_f_work {
 
   measure: count {
     type: count
-    drill_fields: [tenant_name, client_name, primary_status_name, secondary_status_name, assigned_user, work_item_title, dates.date, work_due.date]
+    drill_fields: [work_item_title, client_name, combined_status_name, assigned_user,  dates.date, work_due.date]
   }
 
   measure: distinct_work_items {
@@ -169,7 +169,7 @@ view: vw_looker_f_work {
     }
     sql: DATEDIFF(day, ${work_due_date}, ${dates_date});;
     value_format_name: decimal_1
-    #drill_fields: [id, work_title,primary_status,org_name, contact_name,start_date,due_date,completed_date]
+    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month]
   }
 
   #measure: distinct_due_dates {
