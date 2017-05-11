@@ -6,12 +6,12 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
-explore: vw_looker_f_work {
+explore: karbon_work {
   description: "Looker Model for Work"
   #view_label: "Work Looker Model"
   view_label: " "
   access_filter: {
-    field: vw_looker_f_work.tenant_permakey
+    field: karbon_work.tenant_permakey
     user_attribute: tenant_permakey
   }
 }
