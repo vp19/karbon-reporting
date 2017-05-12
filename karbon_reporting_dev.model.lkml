@@ -8,6 +8,7 @@ include: "*.dashboard"
 
 explore: vw_looker_f_work {
   description: "Looker Model for Work"
+  label: "Karbon Work"
   #view_label: "Work Looker Model"
   view_label: " "
   access_filter: {
