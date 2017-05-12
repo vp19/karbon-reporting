@@ -77,8 +77,8 @@
     - vw_looker_f_work.dates_month
     - vw_looker_f_work.distinct_work_items
     - vw_looker_f_work.avg_days_overdue
-    fill_fields:
-    - vw_looker_f_work.dates_month
+    #fill_fields:
+    #- vw_looker_f_work.dates_month
     filters:
       vw_looker_f_work.is_overdue: Y
     sorts:
@@ -132,10 +132,10 @@
     fields:
     - vw_looker_f_work.distinct_work_items
     - vw_looker_f_work.dates_month
-    fill_fields:
-    - vw_looker_f_work.dates_month
+    #fill_fields:
+    #- vw_looker_f_work.dates_month
     filters:
-      vw_looker_f_work.dates_date: 2 months
+    #  vw_looker_f_work.dates_date: 2 months
       vw_looker_f_work.primary_status_name: Completed
     sorts:
     - vw_looker_f_work.dates_month desc
@@ -203,10 +203,10 @@
     fields:
     - vw_looker_f_work.distinct_work_items
     - vw_looker_f_work.dates_month
-    fill_fields:
-    - vw_looker_f_work.dates_month
+    # fill_fields:
+    # - vw_looker_f_work.dates_month
     filters:
-      vw_looker_f_work.dates_date: 2 months
+      # vw_looker_f_work.dates_date: 2 months
       vw_looker_f_work.primary_status_name: "-Completed,-Planned"
     sorts:
     - vw_looker_f_work.dates_month desc
@@ -266,6 +266,10 @@
     col: 0
     width: 8
     height: 4
+
+
+
+
   - name: Work currently in each open status
     label: Work currently in each open status
     model: karbon_reporting_dev
@@ -340,10 +344,10 @@
     - work_due_and_completed.number_work_items
     pivots:
     - work_due_and_completed.status
-    fill_fields:
-    - work_due_and_completed.dates_date
+    #fill_fields:
+    #- work_due_and_completed.dates_date
     filters:
-      work_due_and_completed.dates_date: 1 months
+     # work_due_and_completed.dates_date: 1 months
     sorts:
     - work_due_and_completed.dates_date
     - work_due_and_completed.status 0
@@ -410,8 +414,8 @@
     fields:
     - days_to_complete_work.avg_days_to_complete
     - days_to_complete_work.completed_date_month
-    fill_fields:
-    - days_to_complete_work.completed_date_month
+    #fill_fields:
+    #- days_to_complete_work.completed_date_month
     sorts:
     - days_to_complete_work.completed_date_month desc
     limit: 500
