@@ -1,4 +1,4 @@
-view: karbon_work {
+view: vw_looker_f_work {
   sql_table_name: Reporting.vw_looker_F_Work ;;
   label: "Work"
 
@@ -100,7 +100,7 @@ view: karbon_work {
     label: "Work Item Permakey Link"
     link: {
           label: "Work Item"
-          url: "https://stage.karbonhq.com/{{ karbon_work.tenant_permakey.value }}#/work/{{ value }}"
+          url: "https://stage.karbonhq.com/{{ vw_looker_f_work.tenant_permakey.value }}#/work/{{ value }}"
     }
     sql: ${source_work_item_permakey} ;;
   }
@@ -137,7 +137,7 @@ view: karbon_work {
     #primary_key: yes
     link: {
       label: "Work Item"
-      url: "https://stage.karbonhq.com/{{ karbon_work.tenant_permakey._value }}#/work/{{ karbon_work.source_work_item_permakey._value }}"
+      url: "https://stage.karbonhq.com/{{ vw_looker_f_work.tenant_permakey._value }}#/work/{{ vw_looker_f_work.source_work_item_permakey._value }}"
       icon_url: "https://karbonhq.com/themes/karbon/img/icons/favicons/favicon-16x16.png"
     }
     sql: ${TABLE}.work_item_title ;;
