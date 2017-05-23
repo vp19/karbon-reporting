@@ -84,6 +84,7 @@ view: vw_looker_f_work {
     sql: CASE WHEN ${secondary_status_name} IS NOT NULL THEN ${secondary_status_name} ELSE ${primary_status_name} END ;;
   }
 
+
   dimension: source_work_item_permakey {
     type: string
     hidden: yes

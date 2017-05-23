@@ -28,6 +28,12 @@ view: days_spent_in_open_states {
     sql: ${TABLE}.status ;;
   }
 
+  dimension: combined_sort_order {
+    type: string
+    label: "Sort Order"
+    sql: ${TABLE}.combined_sort_order ;;
+  }
+
   dimension_group: last {
     type: time
     label: "Date"
