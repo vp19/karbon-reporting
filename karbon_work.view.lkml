@@ -150,6 +150,16 @@ view: vw_looker_f_work {
     sql: ${TABLE}.year ;;
   }
 
+  dimension: start_date {
+    type: date
+    sql: ${TABLE}.min_date ;;
+  }
+
+  dimension: completed_date {
+    type: date
+    sql: ${TABLE}.max_date ;;
+  }
+
   measure: count {
     type: count
     drill_fields: [work_item_title, client_name, combined_status_name, assigned_user,  dates.date, work_due.date]
@@ -158,7 +168,40 @@ view: vw_looker_f_work {
   measure: distinct_work_items {
     type: count_distinct
     sql: ${source_work_item_permakey} ;;
-    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month]
+    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month, start_date, source_work_item_permakey]
+  }
+
+  measure: completed_work_items {
+    type: count_distinct
+    label: "Completed Work Items"
+    sql: ${source_work_item_permakey} ;;
+    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month, completed_date, source_work_item_permakey]
+    filters: {
+      field: primary_status_name
+      value: "Completed"
+    }
+  }
+
+  measure: started_work_items {
+    type: count_distinct
+    label: "Started Work Items"
+    sql: ${source_work_item_permakey} ;;
+    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month, start_date, source_work_item_permakey]
+    filters: {
+      field: primary_status_name
+      value: "-Planned,-Completed"
+    }
+  }
+
+  measure: overdue_work_items {
+    type: count_distinct
+    label: "Overdue Work Items"
+    sql: ${source_work_item_permakey} ;;
+    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month, start_date, source_work_item_permakey]
+    filters: {
+      field: is_overdue
+      value: "Y"
+    }
   }
 
   measure: avg_days_overdue {
@@ -170,7 +213,7 @@ view: vw_looker_f_work {
     }
     sql: DATEDIFF(day, ${work_due_date}, ${dates_date});;
     value_format_name: decimal_1
-    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month]
+    drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month, start_date, source_work_item_permakey]
   }
 
   #measure: distinct_due_dates {
