@@ -25,10 +25,10 @@ view: vw_looker_f_work {
     hidden: yes
     type: string
     primary_key: yes
-    sql: concat(${dates_raw},${tenant_permakey},${source_work_item_permakey});;
+    sql: concat(${work_raw},${tenant_permakey},${source_work_item_permakey});;
   }
 
-  dimension_group: dates {
+  dimension_group: work {
     type: time
     timeframes: [
       raw,
@@ -39,6 +39,7 @@ view: vw_looker_f_work {
       year
     ]
     convert_tz: no
+    description: "The date the Work Item occured"
     sql: ${TABLE}.dates ;;
   }
 
@@ -211,7 +212,7 @@ view: vw_looker_f_work {
       field: is_overdue
       value: "Y"
     }
-    sql: DATEDIFF(day, ${work_due_date}, ${dates_date});;
+    sql: DATEDIFF(day, ${work_due_date}, ${work_date});;
     value_format_name: decimal_1
     drill_fields: [work_item_title, client_name, combined_status_name,  assigned_user, dates.month, work_due.month, start_date, source_work_item_permakey]
   }
