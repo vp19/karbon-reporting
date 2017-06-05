@@ -46,3 +46,13 @@ explore:  due_dates_moved {
     user_attribute: tenant_permakey
   }
 }
+
+explore: work_summary {
+  description: "Looker Model for Work"
+  label: "Work Summary"
+  view_label: " "
+  access_filter: {
+    field: work_summary.tenant_permakey
+    user_attribute: tenant_permakey
+  }
+}

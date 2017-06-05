@@ -4,28 +4,27 @@
   - name: Overdue work by assignee
     label: Overdue work by assignee
     model: karbon_reporting_dev
-    explore: vw_looker_f_work
+    explore: work_summary
     type: looker_bar
     fields:
-    - vw_looker_f_work.assigned_user
-    - vw_looker_f_work.distinct_work_items
+    - work_summary.assigned_user
+    - work_summary.distinct_work_items
     filters:
-      vw_looker_f_work.is_overdue: Y
+      work_summary.is_overdue: Y
     sorts:
-    - vw_looker_f_work.distinct_work_items desc
+    - work_summary.distinct_work_items desc
     limit: 500
     column_limit: 50
-    query_timezone: America/Los_Angeles
     stacking: ''
     show_value_labels: false
     label_density: 25
     legend_position: center
     x_axis_gridlines: false
     y_axis_gridlines: true
-    show_view_names: true
+    show_view_names: false
     limit_displayed_rows: true
     y_axis_combined: true
-    show_y_axis_labels: false
+    show_y_axis_labels: true
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
@@ -39,19 +38,31 @@
     show_silhouette: false
     totals_color: "#808080"
     series_types: {}
-    series_colors:
-      vw_looker_f_work.count: "#AAD48B"
-      vw_looker_f_work.distinct_work_items: "#AAD48B"
-    x_axis_label: Assigned User
-    series_labels:
-      vw_looker_f_work.count: "# Work Overdue"
-      vw_looker_f_work.distinct_work_items: "# Work Overdue"
     limit_displayed_rows_values:
       show_hide: show
       first_last: first
       num_rows: '20'
+    series_labels:
+      work_summary.distinct_work_items: "# Work Overdue"
+    series_colors:
+      work_summary.distinct_work_items: "#AAD48B"
+    y_axes:
+    - label: ''
+      maxValue:
+      minValue:
+      orientation: bottom
+      showLabels: false
+      showValues: true
+      tickDensity: default
+      tickDensityCustom: 5
+      type: linear
+      unpinAxis: false
+      valueFormat:
+      series:
+      - id: work_summary.distinct_work_items
+        name: "# Work Overdue"
     listen:
-      Month: vw_looker_f_work.work_month
+      Month: work_summary.work_month
     row:
     col:
     width:

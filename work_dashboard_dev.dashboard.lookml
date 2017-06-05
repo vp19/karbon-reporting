@@ -7,27 +7,93 @@
     tile_text_color: "#3a4245"
     text_tile_text_color: ''
   elements:
-  - name: Work Items Completed On Time - Total
-    label: Work Items Completed On Time - Total
+  - name: Avg amount of time work spent in each status
+    label: Avg amount of time work spent in each status
     model: karbon_reporting_dev
-    explore: vw_looker_f_work
+    explore: days_spent_in_open_states
+    type: looker_bar
+    fields:
+    - days_spent_in_open_states.combined_sort_order
+    - days_spent_in_open_states.status
+    - days_spent_in_open_states.avg_days_difference
+    sorts:
+    - days_spent_in_open_states.combined_sort_order
+    limit: 500
+    column_limit: 50
+    stacking: ''
+    show_value_labels: false
+    label_density: 13
+    legend_position: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: true
+    limit_displayed_rows: false
+    y_axis_combined: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    x_axis_scale: auto
+    y_axis_scale_mode: linear
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    series_types: {}
+    series_colors:
+      days_spent_in_open_states.avg_days_difference: "#AAD48B"
+    x_axis_label: Status
+    y_axes:
+    - label: Days in status
+      maxValue:
+      minValue:
+      orientation: bottom
+      showLabels: true
+      showValues: true
+      tickDensity: default
+      tickDensityCustom: 5
+      type: linear
+      unpinAxis: false
+      valueFormat:
+      series:
+      - id: days_spent_in_open_states.avg_days_difference
+        name: Days In Status
+    series_labels:
+      days_spent_in_open_states.avg_days_difference: Days In Status
+    hidden_fields:
+    - days_spent_in_open_states.combined_sort_order
+    listen:
+      Line Chart Date Filter: days_spent_in_open_states.last_month
+    note_state: collapsed
+    note_display: hover
+    note_text: Find out where the bottle necks are in the workflow.
+    row: 19
+    col: 0
+    width: 24
+    height: 11
+  - name: Work Items Completed On Time
+    label: Work Items Completed On Time
+    model: karbon_reporting_dev
+    explore: work_summary
     type: single_value
     fields:
-    - vw_looker_f_work.distinct_work_items
-    - vw_looker_f_work.is_overdue
+    - work_summary.is_overdue
+    - work_summary.distinct_work_items
     filters:
-      vw_looker_f_work.primary_status_name: Completed
+      work_summary.primary_status_name: Completed
     sorts:
-    - vw_looker_f_work.distinct_work_items desc
+    - work_summary.distinct_work_items desc
     limit: 500
     column_limit: 50
     dynamic_fields:
     - table_calculation: total_completed
       label: Total Completed
-      expression: "${vw_looker_f_work.distinct_work_items} + offset(${vw_looker_f_work.distinct_work_items},1)"
+      expression: "${work_summary.distinct_work_items} + offset(${work_summary.distinct_work_items},1)"
       value_format:
       value_format_name:
-    query_timezone: America/Los_Angeles
     custom_color_enabled: false
     custom_color: forestgreen
     show_single_value_title: true
@@ -59,11 +125,9 @@
     totals_color: "#808080"
     series_types: {}
     single_value_title: Work items completed on time
-    hidden_fields:
-    - vw_looker_f_work.dates_month
     comparison_label: work items completed
     listen:
-      Line Chart Date Filter: vw_looker_f_work.work_month
+      Line Chart Date Filter: work_summary.work_month
     note_state: collapsed
     note_display: hover
     note_text: The percentage of work items that were completed on time (not overdue)
@@ -72,28 +136,27 @@
     row: 14
     col: 0
     width: 12
-    height: 4
-  - name: Work Items Overdue - Total
-    label: Work Items Overdue - Total
+    height: 5
+  - name: Work Items Overdue
+    label: Work Items Overdue
     model: karbon_reporting_dev
-    explore: vw_looker_f_work
+    explore: work_summary
     type: single_value
     fields:
-    - vw_looker_f_work.overdue_work_items
-    - vw_looker_f_work.avg_days_overdue
-    - vw_looker_f_work.work_month
+    - work_summary.work_month
+    - work_summary.overdue_work_items
+    - work_summary.avg_days_overdue
     fill_fields:
-    - vw_looker_f_work.work_month
+    - work_summary.work_month
     sorts:
-    - vw_looker_f_work.work_month desc
+    - work_summary.work_month desc
     limit: 500
     column_limit: 50
-    query_timezone: America/Los_Angeles
     custom_color_enabled: false
     custom_color: forestgreen
     show_single_value_title: true
     show_comparison: true
-    comparison_type: value
+    comparison_type: change
     comparison_reverse_colors: false
     show_comparison_label: true
     stacking: ''
@@ -120,9 +183,8 @@
     totals_color: "#808080"
     series_types: {}
     single_value_title: Work items overdue
-    comparison_label: days overdue on avg
-    listen:
-      Comparison Date Filter: vw_looker_f_work.work_month
+    comparison_label: days overdue on average
+    listen: {}
     note_state: collapsed
     note_display: hover
     note_text: The number of work items that were overdue during the time period.
@@ -130,27 +192,26 @@
     col: 16
     width: 8
     height: 4
-  - name: Work Items Completed - Total
-    label: Work Items Completed - Total
+  - name: Work Items Completed
+    label: Work Items Completed
     model: karbon_reporting_dev
-    explore: vw_looker_f_work
+    explore: work_summary
     type: single_value
     fields:
-    - vw_looker_f_work.completed_work_items
-    - vw_looker_f_work.work_month
+    - work_summary.work_month
+    - work_summary.completed_work_items
     fill_fields:
-    - vw_looker_f_work.work_month
+    - work_summary.work_month
     sorts:
-    - vw_looker_f_work.work_month desc
+    - work_summary.work_month desc
     limit: 500
     column_limit: 50
     dynamic_fields:
-    - table_calculation: previous_month_difference
-      label: Previous Month Difference
-      expression: coalesce(${vw_looker_f_work.completed_work_items},0) - offset(${vw_looker_f_work.completed_work_items},1)
+    - table_calculation: previous_months_difference
+      label: Previous Months Difference
+      expression: coalesce(${work_summary.completed_work_items},0) - offset(${work_summary.completed_work_items},1)
       value_format:
       value_format_name:
-    query_timezone: America/Los_Angeles
     custom_color_enabled: false
     custom_color: forestgreen
     show_single_value_title: true
@@ -164,115 +225,31 @@
     legend_position: center
     x_axis_gridlines: false
     y_axis_gridlines: true
-    show_view_names: false
+    show_view_names: true
     limit_displayed_rows: false
     y_axis_combined: true
-    show_y_axis_labels: false
+    show_y_axis_labels: true
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
-    show_x_axis_label: false
+    show_x_axis_label: true
     show_x_axis_ticks: true
     x_axis_scale: auto
     y_axis_scale_mode: linear
-    show_null_points: true
-    point_style: circle_outline
-    interpolation: monotone
+    ordering: none
+    show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
-    ordering: none
-    show_null_labels: false
     series_types: {}
     single_value_title: Work items completed
-    hidden_fields: []
-    hide_legend: false
-    x_axis_label: Date
-    y_axis_labels:
-    - Work Items
-    series_labels:
-      vw_looker_f_work.distinct_work_items: Work Items
     comparison_label: from previous period
-    listen:
-      Comparison Date Filter: vw_looker_f_work.work_month
+    listen: {}
     note_state: collapsed
     note_display: hover
     note_text: Work items that were completed during the time period.
     row: 0
     col: 8
-    width: 8
-    height: 4
-  - name: Work Items Started - Total
-    label: Work Items Started - Total
-    model: karbon_reporting_dev
-    explore: vw_looker_f_work
-    type: single_value
-    fields:
-    - vw_looker_f_work.started_work_items
-    - vw_looker_f_work.work_month
-    fill_fields:
-    - vw_looker_f_work.work_month
-    sorts:
-    - vw_looker_f_work.work_month desc
-    limit: 500
-    column_limit: 50
-    dynamic_fields:
-    - table_calculation: previous_month_difference
-      label: Previous Month Difference
-      expression: "${vw_looker_f_work.started_work_items} - offset(${vw_looker_f_work.started_work_items},1)"
-      value_format:
-      value_format_name:
-    query_timezone: America/Los_Angeles
-    custom_color_enabled: false
-    custom_color: forestgreen
-    show_single_value_title: true
-    show_comparison: true
-    comparison_type: change
-    comparison_reverse_colors: false
-    show_comparison_label: true
-    stacking: ''
-    show_value_labels: false
-    label_density: 25
-    legend_position: center
-    x_axis_gridlines: false
-    y_axis_gridlines: true
-    show_view_names: false
-    limit_displayed_rows: false
-    y_axis_combined: true
-    show_y_axis_labels: false
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: false
-    show_x_axis_ticks: true
-    x_axis_scale: auto
-    y_axis_scale_mode: linear
-    show_null_points: true
-    point_style: circle_outline
-    interpolation: monotone
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
-    ordering: none
-    show_null_labels: false
-    series_types: {}
-    single_value_title: Work items started
-    hidden_fields:
-    hide_legend: false
-    x_axis_label: Date
-    y_axis_labels:
-    - Work Items
-    series_labels:
-      vw_looker_f_work.distinct_work_items: Work Items
-    comparison_label: from previous period
-    listen:
-      Comparison Date Filter: vw_looker_f_work.work_month
-    note_state: collapsed
-    note_display: hover
-    note_text: Work items that transitioned from a Planned status to an In Progress
-      status.
-    row: 0
-    col: 0
     width: 8
     height: 4
   - name: When work was completed
@@ -385,24 +362,26 @@
     col: 0
     width: 24
     height: 10
-  - name: Days to complete work on average - Total
-    label: Days to complete work on average - Total
+  - name: Work Items Started
+    label: Work Items Started
     model: karbon_reporting_dev
-    explore: days_to_complete_work
+    explore: work_summary
     type: single_value
     fields:
-    - days_to_complete_work.avg_days_to_complete
-    - days_to_complete_work.completed_date_month
+    - work_summary.start_month
+    - work_summary.started_work_items
     fill_fields:
-    - days_to_complete_work.completed_date_month
+    - work_summary.start_month
+    filters:
+      work_summary.startdate_equal_datemonth: 'Yes'
     sorts:
-    - days_to_complete_work.completed_date_month desc
+    - work_summary.start_month desc
     limit: 500
     column_limit: 50
     dynamic_fields:
-    - table_calculation: prev_month_value
-      label: Prev Month value
-      expression: coalesce(${days_to_complete_work.avg_days_to_complete},0) - offset(${days_to_complete_work.avg_days_to_complete},1)
+    - table_calculation: previous_months_difference
+      label: Previous Months Difference
+      expression: "${work_summary.started_work_items} - offset(${work_summary.started_work_items},1)"
       value_format:
       value_format_name:
     custom_color_enabled: false
@@ -410,7 +389,7 @@
     show_single_value_title: true
     show_comparison: true
     comparison_type: change
-    comparison_reverse_colors: true
+    comparison_reverse_colors: false
     show_comparison_label: true
     stacking: ''
     show_value_labels: false
@@ -435,34 +414,49 @@
     show_silhouette: false
     totals_color: "#808080"
     series_types: {}
-    single_value_title: Days to complete work on avg
+    single_value_title: Work Items Started
     comparison_label: from previous period
-    listen:
-      Comparison Date Filter: days_to_complete_work.completed_date_month
+    listen: {}
     note_state: collapsed
     note_display: hover
-    note_text: How long it takes to complete work (Start date to completion date)
-      on average.
-    row: 14
-    col: 12
-    width: 12
+    note_text: Work items that transitioned from a Planned status to an In Progress
+      status.
+    row: 0
+    col: 0
+    width: 8
     height: 4
-  - name: Avg amount of time work spent in each status
-    label: Avg amount of time work spent in each status
+  - name: Days to complete work on average
+    label: Days to complete work on average
     model: karbon_reporting_dev
-    explore: days_spent_in_open_states
-    type: looker_bar
+    explore: work_summary
+    type: single_value
     fields:
-    - days_spent_in_open_states.combined_sort_order
-    - days_spent_in_open_states.status
-    - days_spent_in_open_states.avg_days_difference
+    - work_summary.work_month
+    - work_summary.avg_days_to_complete
+    fill_fields:
+    - work_summary.work_month
+    filters:
+      work_summary.primary_status_name: Completed
     sorts:
-    - days_spent_in_open_states.combined_sort_order
+    - work_summary.work_month desc
     limit: 500
     column_limit: 50
+    dynamic_fields:
+    - table_calculation: previous_month_difference
+      label: Previous Month Difference
+      expression: coalesce(${work_summary.avg_days_to_complete},0) - offset(${work_summary.avg_days_to_complete},1)
+      value_format:
+      value_format_name:
+    custom_color_enabled: false
+    custom_color: forestgreen
+    show_single_value_title: true
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: false
+    show_comparison_label: true
     stacking: ''
     show_value_labels: false
-    label_density: 13
+    label_density: 25
     legend_position: center
     x_axis_gridlines: false
     y_axis_gridlines: true
@@ -473,7 +467,7 @@
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
-    show_x_axis_label: false
+    show_x_axis_label: true
     show_x_axis_ticks: true
     x_axis_scale: auto
     y_axis_scale_mode: linear
@@ -483,51 +477,33 @@
     show_silhouette: false
     totals_color: "#808080"
     series_types: {}
-    series_colors:
-      days_spent_in_open_states.avg_days_difference: "#AAD48B"
-    x_axis_label: Status
-    y_axes:
-    - label: Days in status
-      maxValue:
-      minValue:
-      orientation: bottom
-      showLabels: true
-      showValues: true
-      tickDensity: default
-      tickDensityCustom: 5
-      type: linear
-      unpinAxis: false
-      valueFormat:
-      series:
-      - id: days_spent_in_open_states.avg_days_difference
-        name: Days In Status
-    series_labels:
-      days_spent_in_open_states.avg_days_difference: Days In Status
-    hidden_fields:
-    - days_spent_in_open_states.combined_sort_order
+    value_format: ''
+    single_value_title: Days to complete work on avg
+    comparison_label: from previous period
     listen:
-      Line Chart Date Filter: days_spent_in_open_states.last_month
+      Comparison Date Filter: work_summary.work_month
     note_state: collapsed
     note_display: hover
-    note_text: Find out where the bottle necks are in the workflow.
-    row: 18
-    col: 0
-    width: 24
-    height: 11
+    note_text: How long it takes to complete work (Start date to completion date)
+      on average.
+    row: 14
+    col: 12
+    width: 12
+    height: 5
   filters:
-  - name: Comparison Date Filter
-    title: Comparison Date Filter
+  - name: Line Chart Date Filter
+    title: Line Chart Date Filter
     type: date_filter
-    default_value: 2 months
+    default_value: this month
     model:
     explore:
     field:
     listens_to_filters: []
     allow_multiple_values: true
-  - name: Line Chart Date Filter
-    title: Line Chart Date Filter
+  - name: Comparison Date Filter
+    title: Comparison Date Filter
     type: date_filter
-    default_value: this month
+    default_value: 2 months
     model:
     explore:
     field:
