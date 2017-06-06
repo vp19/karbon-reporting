@@ -150,7 +150,7 @@ view: work_summary {
     #primary_key: yes
     link: {
       label: "Work Item"
-      url: "https://stage.karbonhq.com/{{ looker_summary_f_work.tenant_permakey._value }}#/work/{{ looker_summary_f_work.source_work_item_permakey._value }}"
+      url: "https://stage.karbonhq.com/{{ work_summary.tenant_permakey._value }}#/work/{{ work_summary.source_work_item_permakey._value }}"
       icon_url: "https://karbonhq.com/themes/karbon/img/icons/favicons/favicon-16x16.png"
     }
     sql: ${TABLE}.work_item_title ;;
